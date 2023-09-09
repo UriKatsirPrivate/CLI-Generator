@@ -39,7 +39,7 @@ top_k = st.sidebar.number_input('Enter top_k',min_value=1,max_value=40,step=1,va
 
 
 # Step-2 Put a submit button with an appropriate title
-if st.button('Generate GCP CLI Command'):
+if st.button('Generate GCP CLI Command',disabled=not (project_id)):
     # Step-3 Call functions only if all user inputs are taken and the button is clicked.
     if user_input:
         with st.spinner('Generating command...'):
