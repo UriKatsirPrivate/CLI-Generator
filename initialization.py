@@ -4,37 +4,23 @@ import vertexai
 from langchain.llms import VertexAI
 # from google.cloud import secretmanager
 
-def load_constants_locally():
-    with open('constants.json', 'r') as f:
-        data = json.load(f)
-        
-    global PROJECT_ID, MODEL_NAME, MAX_OUTPUT_TOKENS, TEMPERATURE, TOP_P, TOP_K, REGION
-    PROJECT_ID = data["PROJECT_ID"]
-    MODEL_NAME = data["MODEL_NAME"]
-    MAX_OUTPUT_TOKENS = data["MAX_OUTPUT_TOKENS"]
-    TEMPERATURE = data["TEMPERATURE"]
-    TOP_P = data["TOP_P"]
-    TOP_K = data["TOP_K"]
-    REGION = data["REGION"]
-
-def initialize_llm():
-    load_constants_locally()
-    
+def initialize_llm(project_id,region,model_name,max_output_tokens,temperature,top_p,top_k):
+   
     # Initialize VertexAI and set up the LLM
-    init_vertexai()
-    return set_up_llm()
+    init_vertexai(project_id=project_id,region=region)
+    return set_up_llm(model_name=model_name,max_output_tokens=max_output_tokens,temperature=temperature,top_p=top_p,top_k=top_k)
 
-def init_vertexai():
+def init_vertexai(project_id,region):
     # Initialize VertexAI with the proper settings
-    vertexai.init(project=PROJECT_ID, location=REGION)
+    vertexai.init(project=project_id, location=region)
 
-def set_up_llm():
+def set_up_llm(model_name,max_output_tokens,temperature,top_p,top_k):
     # Set up the VertexAI with the specified parameters
     return VertexAI(
-        model_name=MODEL_NAME,
-        max_output_tokens=MAX_OUTPUT_TOKENS,
-        temperature=TEMPERATURE,
-        top_p=TOP_P,
-        top_k=TOP_K,
+        model_name=model_name,
+        max_output_tokens=max_output_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        top_k=top_k,
         verbose=True,
     )

@@ -3,15 +3,11 @@ from langchain import LLMChain
 from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
                                     SystemMessagePromptTemplate)
-# from langchain.document_loaders import *
-# from langchain.chains.summarize import load_summarize_chain
-# import tempfile
-# from langchain.docstore.document import Document
-from initialization import *
+from initialization import initialize_llm
 
 def gcpCliCommandGenerator(user_input):
     
-    llm = initialize_llm()
+    llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
     
     system_template = """You are a virtual assistant capable of generating the corresponding Google Cloud Platform (GCP) command-line interface (CLI) command based on the user's input."""
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
@@ -33,6 +29,14 @@ def display_gcp_command(gcp_command):
 
 # Step-1 Get input from the user
 user_input = st.text_input("Please enter the desired GCP operation")
+project_id=st.sidebar.text_input("Please enter the project id")
+region=st.sidebar.selectbox("Please enter the region",['us-central1'])
+model_name = st.sidebar.selectbox('Enter model name',['text-bison','text-bison-32k','code-bison','code-bison-32k'])
+max_tokens = st.sidebar.number_input('Enter max token output',min_value=1,max_value=8192,step=100,value=1024)
+temperature = st.sidebar.number_input('Enter temperature',min_value=0.0,max_value=1.0,step=0.1,value=0.1)
+top_p = st.sidebar.number_input('Enter top_p',min_value=0.0,max_value=1.0,step=0.1,value=0.8)
+top_k = st.sidebar.number_input('Enter top_k',min_value=1,max_value=40,step=1,value=40)
+
 
 # Step-2 Put a submit button with an appropriate title
 if st.button('Generate GCP CLI Command'):
