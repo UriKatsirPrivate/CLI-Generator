@@ -1,22 +1,15 @@
 import streamlit as st
 from langchain import LLMChain
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
                                     SystemMessagePromptTemplate)
-from langchain.document_loaders import *
-from langchain.chains.summarize import load_summarize_chain
-import tempfile
-from langchain.docstore.document import Document
+# from langchain.document_loaders import *
+# from langchain.chains.summarize import load_summarize_chain
+# import tempfile
+# from langchain.docstore.document import Document
 from initialization import *
 
-
-
 def gcpCliCommandGenerator(user_input):
-    # chat = ChatOpenAI(
-    #     model="gpt-3.5-turbo-16k",
-    #     temperature=0
-    # )
     
     llm = initialize_llm()
     
@@ -38,12 +31,12 @@ def display_gcp_command(gcp_command):
     else:
         st.markdown("No command generated. Please enter a valid GCP operation.")
 
-# Step-3 Get input from the user
+# Step-1 Get input from the user
 user_input = st.text_input("Please enter the desired GCP operation")
 
-# Step-4 Put a submit button with an appropriate title
+# Step-2 Put a submit button with an appropriate title
 if st.button('Generate GCP CLI Command'):
-    # Step-5 Call functions only if all user inputs are taken and the button is clicked.
+    # Step-3 Call functions only if all user inputs are taken and the button is clicked.
     if user_input:
         gcp_command = gcpCliCommandGenerator(user_input)
         display_gcp_command(gcp_command)
