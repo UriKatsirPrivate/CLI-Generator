@@ -29,7 +29,8 @@ def display_gcp_command(gcp_command):
 
 # Step-1 Get input from the user
 user_input = st.text_input("Please enter the desired GCP operation")
-project_id=st.sidebar.text_input("Please enter the project id")
+st.sidebar.write("Project ID: landing-zone-demo-341118") 
+project_id="landing-zone-demo-341118"
 region=st.sidebar.selectbox("Please enter the region",['us-central1'])
 model_name = st.sidebar.selectbox('Enter model name',['text-bison','text-bison-32k','code-bison','code-bison-32k'])
 max_tokens = st.sidebar.number_input('Enter max token output',min_value=1,max_value=8192,step=100,value=1024)
