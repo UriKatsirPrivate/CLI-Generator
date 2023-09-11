@@ -2,7 +2,7 @@ from langchain.llms import VertexAI
 
 # Initialize LLM
 def initialize_llm(project_id,region,model_name,max_output_tokens,temperature,top_p,top_k):
-   
+    
     # Initialize VertexAI and set up the LLM
     return VertexAI(
         project=project_id,
