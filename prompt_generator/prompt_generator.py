@@ -1,7 +1,9 @@
 from langchain import LLMChain
 from langchain.chat_models import ChatOpenAI
 from prompts import PROMPT_IMPROVER_PROMPT
-from initialization import initialize_llm
+from  initialization import initialize_llm
+
+
 initial_prompt = "Generate a workout schedule"
 
 # Initialize LLM
