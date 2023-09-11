@@ -4,13 +4,7 @@ from prompts import PROMPT_IMPROVER_PROMPT
 from  initialization import initialize_llm
 
 
-
-# This Python Script is a Streamlit App that allows you to generate a prompt using the Prompt Improver Template
-# You can run this file by running the following command in your terminal:
-# streamlit run prompt_generator_streamlit.py
-
 # Set up Streamlit Interface
-
 st.sidebar.write("Project ID: landing-zone-demo-341118") 
 project_id="landing-zone-demo-341118"
 region=st.sidebar.selectbox("Please enter the region",['us-central1'])
@@ -20,25 +14,28 @@ temperature = st.sidebar.number_input('Enter temperature',min_value=0.0,max_valu
 top_p = st.sidebar.number_input('Enter top_p',min_value=0.0,max_value=1.0,step=0.1,value=0.8)
 top_k = st.sidebar.number_input('Enter top_k',min_value=1,max_value=40,step=1,value=40)
 
-with st.container():
-    st.markdown("""
-                ## Enter Initial Prompt Here:
-                """)
-initial_prompt = st.text_area(label="Prompt Input", label_visibility='collapsed', placeholder="Generate a workout schedule", key="prompt_input")
+# with st.container():
+st.markdown("""## Prompt Improver:""")
+# initial_prompt = st.text_input(label="Prompt Input", label_visibility='collapsed', placeholder="Generate a workout schedule", key="prompt_input")
+initial_prompt = st.text_input("Please enter your prompt here:")
 
-
-if initial_prompt:
-    # Initialize LLM
-    llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
+# Initialize LLM
+llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
         
-    # Initialize LLMChain
-    prompt_improver_chain = LLMChain(llm=llm, prompt=PROMPT_IMPROVER_PROMPT)
+# Initialize LLMChain
+prompt_improver_chain = LLMChain(llm=llm, prompt=PROMPT_IMPROVER_PROMPT)
 
-    # Run LLMChain
-    if st.button('Generate Improved Prompt',disabled=not (project_id)):
+# Run LLMChain
+if st.button('Generate Improved Prompt',disabled=not (project_id) or not (initial_prompt)):
+    if initial_prompt:
         with st.spinner("Generating Improved Prompt..."):
             improved_prompt = prompt_improver_chain.run(initial_prompt)
             st.markdown("""
-                        ## Improved Prompt:
-                        """)
+                            ## Improved Prompt:
+                            """)
             st.code(improved_prompt)
+    else:
+        st.error(f"Please provide a prompt")      
+
+
+    
