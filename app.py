@@ -5,6 +5,18 @@ from langchain.prompts.chat import (ChatPromptTemplate,
                                     SystemMessagePromptTemplate)
 from initialization import initialize_llm
 
+# https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config
+st.set_page_config(
+    page_title="GCP CLI Generator",
+    page_icon="icons/vertexai.png",
+    layout="centered",
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get help': 'https://cloud.google.com/vertex-ai?hl=en',
+        'About': "#### Created by [Uri Katsir](https://www.linkedin.com/in/uri-katsir/)"
+    }
+)
+
 def gcpCliCommandGenerator(user_input):
     
     llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)

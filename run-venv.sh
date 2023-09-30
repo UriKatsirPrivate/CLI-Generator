@@ -3,7 +3,7 @@ source myenv/bin/activate
 python3 -m pip install --upgrade pip
 export SYSTEM_VERSION_COMPAT=1
 pip3 install -r requirements.txt
-streamlit run ./prompt_generator/prompt_generator_streamlit.py
+streamlit run app.py
 # streamlit run secure_prompt.py
 # deactivate
 # rm -rf myenv
