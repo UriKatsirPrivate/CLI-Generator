@@ -2,7 +2,7 @@
 
 ## Generates gcloud commands based on an input from the user 
 
-### see it in action [here](https://cligenerator.cloud/)
+### see it in action [here](https://cligenerator.xyz/)
 
 ### How to use
 * Modify app.py:
