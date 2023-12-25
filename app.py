@@ -4,6 +4,7 @@ from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
                                     SystemMessagePromptTemplate)
 from initialization import initialize_llm
+from back import get_project_id
 
 # https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config
 st.set_page_config(
@@ -12,7 +13,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
     menu_items={
-        'Get help': 'https://cloud.google.com/vertex-ai?hl=en',
+        'Get help': 'https://github.com/UriKatsirPrivate/CLI-Generator',
         'About': "#### Created by [Uri Katsir](https://www.linkedin.com/in/uri-katsir/)"
     }
 )
@@ -23,7 +24,9 @@ def gcpCliCommandGenerator(user_input):
     
     system_template = """You are a virtual assistant capable of generating the corresponding Google Cloud Platform (GCP) command-line interface (CLI) command based on the user's input."""
     system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
-    human_template = """The user's input is: '{user_input}'. Please generate the corresponding GCP CLI command."""
+    human_template = """The user's input is: '{user_input}'. Please generate the corresponding GCP CLI command. Be as elaborate as possible and use as many flags as possible.
+                        For every flag you use, explain its purpose. also, make sure to provide a working sample command.
+                        """
     human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
     chat_prompt = ChatPromptTemplate.from_messages(
         [system_message_prompt, human_message_prompt]
@@ -40,16 +43,26 @@ def display_gcp_command(gcp_command):
         st.markdown("No command generated. Please enter a valid GCP operation.")
 
 # Step-1 Get input from the user
-user_input = st.text_input("Please enter the desired GCP operation")
-st.sidebar.write("Project ID: landing-zone-demo-341118") 
-project_id="landing-zone-demo-341118"
-region=st.sidebar.selectbox("Please enter the region",['us-central1'])
-model_name = st.sidebar.selectbox('Enter model name',['text-bison','text-bison-32k','code-bison','code-bison-32k'])
-max_tokens = st.sidebar.number_input('Enter max token output',min_value=1,max_value=8192,step=100,value=1024)
-temperature = st.sidebar.number_input('Enter temperature',min_value=0.0,max_value=1.0,step=0.1,value=0.1)
-top_p = st.sidebar.number_input('Enter top_p',min_value=0.0,max_value=1.0,step=0.1,value=0.8)
-top_k = st.sidebar.number_input('Enter top_k',min_value=1,max_value=40,step=1,value=40)
+REGIONS=["us-central1","europe-west4"]
+MODEL_NAMES=['gemini-pro','text-bison-32k','text-bison','code-bison','code-bison-32k']
 
+PROJECT_ID=st.sidebar.text_input(label="Project ID",value="Your Project ID")
+if PROJECT_ID=="" or PROJECT_ID=="Your Project ID":
+    # print("getting project id")
+    PROJECT_ID=get_project_id()
+
+project_id=PROJECT_ID    
+st.sidebar.write("Project ID: ",f"{PROJECT_ID}")
+user_input = st.text_input("Please enter the desired GCP operation")
+region=st.sidebar.selectbox("Please enter the region",REGIONS)
+model_name = st.sidebar.selectbox('Enter model name',MODEL_NAMES)
+max_tokens = st.sidebar.slider('Enter max token output',min_value=1,max_value=8192,step=100,value=8192)
+temperature = st.sidebar.slider('Enter temperature',min_value=0.0,max_value=1.0,step=0.1,value=0.1)
+top_p = st.sidebar.slider('Enter top_p',min_value=0.0,max_value=1.0,step=0.1,value=0.8)
+top_k = st.sidebar.slider('Enter top_k',min_value=1,max_value=40,step=1,value=40)
+
+if not ('32k' in model_name or 'gemini' in model_name) and max_tokens>1024:
+  st.error(f'{max_tokens} output tokens is not a valid value for model {model_name}')
 
 # Step-2 Put a submit button with an appropriate title
 if st.button('Generate GCP CLI Command',disabled=not (project_id)):
