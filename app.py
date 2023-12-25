@@ -3,8 +3,7 @@ from langchain import LLMChain
 from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
                                     SystemMessagePromptTemplate)
-from initialization import initialize_llm
-from back import get_project_id
+from back import get_project_id, initialize_llm
 
 # https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config
 st.set_page_config(
