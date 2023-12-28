@@ -1,5 +1,6 @@
 import streamlit as st
 from langchain import LLMChain
+from langchain import hub
 from langchain.prompts.chat import (ChatPromptTemplate,
                                     HumanMessagePromptTemplate,
                                     SystemMessagePromptTemplate)
@@ -17,23 +18,34 @@ st.set_page_config(
     }
 )
 
-def gcpCliCommandGenerator(user_input):
+# def gcpCliCommandGenerator(user_input):
     
-    llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
+#     llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
     
-    system_template = """You are a virtual assistant capable of generating the corresponding Google Cloud Platform (GCP) command-line interface (CLI) command based on the user's input."""
-    system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
-    human_template = """The user's input is: '{user_input}'. Please generate the corresponding GCP CLI command. Be as elaborate as possible and use as many flags as possible.
-                        For every flag you use, explain its purpose. also, make sure to provide a working sample command.
-                        """
-    human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
-    chat_prompt = ChatPromptTemplate.from_messages(
-        [system_message_prompt, human_message_prompt]
-    )
+#     system_template = """You are a virtual assistant capable of generating the corresponding Google Cloud Platform (GCP) command-line interface (CLI) command based on the user's input."""
+#     system_message_prompt = SystemMessagePromptTemplate.from_template(system_template)
+#     human_template = """The user's input is: '{user_input}'. Please generate the corresponding GCP CLI command. Be as elaborate as possible and use as many flags as possible.
+#                         For every flag you use, explain its purpose. also, make sure to provide a working sample command.
+#                         """
+#     human_message_prompt = HumanMessagePromptTemplate.from_template(human_template)
+#     chat_prompt = ChatPromptTemplate.from_messages(
+#         [system_message_prompt, human_message_prompt]
+#     )
 
-    chain = LLMChain(llm=llm, prompt=chat_prompt)
-    result = chain.run(user_input=user_input)
-    return result # returns string   
+#     chain = LLMChain(llm=llm, prompt=chat_prompt)
+#     result = chain.run(user_input=user_input)
+#     return result # returns string   
+
+# Function to generate the GCP CLI command based on a prompt form PromptHub
+# https://smith.langchain.com/hub/uri-katsir/generate-gcp-cli-commands
+def generate_gcp_command(user_input):
+    llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
+    prompt =  hub.pull("uri-katsir/generate-gcp-cli-commands")
+    runnable = prompt | llm
+    result = runnable.invoke({
+                        "user_input": user_input
+                    })
+    return result # returns string
 
 def display_gcp_command(gcp_command):
     if gcp_command != "":
@@ -68,7 +80,8 @@ if st.button('Generate GCP CLI Command',disabled=not (project_id)):
     # Step-3 Call functions only if all user inputs are taken and the button is clicked.
     if user_input:
         with st.spinner('Generating command...'):
-            gcp_command = gcpCliCommandGenerator(user_input)
+            # gcp_command = gcpCliCommandGenerator(user_input)
+            gcp_command = generate_gcp_command(user_input)
         display_gcp_command(gcp_command)
     else:
         st.markdown("No command generated. Please enter a valid GCP operation.")
