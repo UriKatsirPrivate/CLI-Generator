@@ -42,6 +42,11 @@ def generate_gcp_command(user_input):
     llm = initialize_llm(project_id,region,model_name,max_tokens,temperature,top_p,top_k)
     prompt =  hub.pull("uri-katsir/generate-gcp-cli-commands")
     runnable = prompt | llm
+    # print(
+    # prompt.format(
+    #     user_input=user_input,
+        
+    # ))
     result = runnable.invoke({
                         "user_input": user_input
                     })
