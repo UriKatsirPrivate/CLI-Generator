@@ -1,5 +1,6 @@
 import requests
-from langchain.llms import VertexAI
+# from langchain.llms import VertexAI
+from langchain_google_vertexai import VertexAI
 
 # Get the project ID from the metadata server
 def get_project_id():
