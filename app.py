@@ -1,9 +1,9 @@
 import streamlit as st
-from langchain import LLMChain
+from langchain.chains import LLMChain
 from langchain import hub
-from langchain.prompts.chat import (ChatPromptTemplate,
-                                    HumanMessagePromptTemplate,
-                                    SystemMessagePromptTemplate)
+# from langchain.prompts.chat import (ChatPromptTemplate,
+#                                     HumanMessagePromptTemplate,
+#                                     SystemMessagePromptTemplate)
 from back import get_project_id, initialize_llm
 
 # https://docs.streamlit.io/library/api-reference/utilities/st.set_page_config
@@ -59,8 +59,8 @@ def display_gcp_command(gcp_command):
         st.markdown("No command generated. Please enter a valid GCP operation.")
 
 # Step-1 Get input from the user
-REGIONS=["us-central1","europe-west4"]
-MODEL_NAMES=['gemini-pro','text-bison-32k','text-bison','code-bison','code-bison-32k']
+REGIONS=["europe-west4","us-central1","us-west4","us-west1","us-east4"]
+MODEL_NAMES=['gemini-1.0-pro-001','text-bison-32k','code-bison-32k']
 
 PROJECT_ID=st.sidebar.text_input(label="Project ID",value="Your Project ID")
 if PROJECT_ID=="" or PROJECT_ID=="Your Project ID":
